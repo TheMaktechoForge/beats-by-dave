@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0b0b0d;
+  --color-bg-elevated: #16161a;
+  --color-bg-card: #1c1c22;
+  --color-border: #2a2a31;
+  --color-text: #ffffff;
+  --color-text-muted: #b8b8c2;
+  --color-text-dim: #6c6c75;
+  --color-accent: #ff8a00;
+  --color-accent-hot: #ff5e00;
+  --color-neon: #39ff14;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html, body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-accent);
+    color: #000;
+  }
+  a { color: inherit; }
+}
+
+@layer components {
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-accent);
+    color: #000;
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: background 120ms;
+  }
+  .btn-primary:hover { background: var(--color-accent-hot); }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--color-text);
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    transition: border-color 120ms, color 120ms;
+  }
+  .btn-ghost:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+  .card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: transform 200ms, border-color 200ms;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+  }
+}
+
+/* Custom waveform styling — neon when playing */
+.waveform-playing ::part(cursor) {
+  background: #a020f0 !important;
+  box-shadow: 0 0 12px #a020f0;
+}
+
+/* Scrollbar polish */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-dim); }
