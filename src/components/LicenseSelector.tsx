@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { BeatWithUrls, LicenseTier } from "@/lib/types";
 import { LICENSES, LICENSE_TIERS } from "@/lib/licenses";
-import { formatPrice, useCart } from "@/lib/cart";
+import { useCart } from "@/lib/cart"; import { formatPrice } from "@/lib/money";
 
 interface Props {
   beat: BeatWithUrls;

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { BeatWithUrls } from "@/lib/types";
-import { formatPrice } from "@/lib/cart";
+import { formatPrice } from "@/lib/money";
 import { WavePlayer } from "./WavePlayer";
 
 interface BeatCardProps {

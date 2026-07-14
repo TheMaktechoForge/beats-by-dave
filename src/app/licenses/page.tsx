@@ -1,5 +1,5 @@
 import { LICENSES, LICENSE_TIERS } from "@/lib/licenses";
-import { formatPrice } from "@/lib/cart";
+import { formatPrice } from "@/lib/money";
 
 export default function LicensesPage() {
   return (

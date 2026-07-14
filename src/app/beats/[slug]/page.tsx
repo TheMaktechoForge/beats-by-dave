@@ -4,7 +4,7 @@ import { resolveBeatUrls } from "@/lib/format";
 import type { BeatWithUrls } from "@/lib/types";
 import { WavePlayer } from "@/components/WavePlayer";
 import { LicenseSelector } from "@/components/LicenseSelector";
-import { formatPrice } from "@/lib/cart";
+import { formatPrice } from "@/lib/money";
 import Link from "next/link";
 
 interface PageProps {

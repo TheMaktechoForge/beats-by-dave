@@ -1,5 +1,5 @@
-// Shared helpers for resolving beat storage paths into URLs that
-// the browser can hit. Server-only — uses the service role.
+// Server-only URL resolution helpers.
+// Imports supabase.ts which uses next/headers — must stay out of client components.
 
 import { getSignedUrl, getPublicUrl } from "./supabase";
 import type { Beat } from "./types";

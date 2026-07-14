@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
-import { useCart, formatPrice, cartItemPrice } from "@/lib/cart";
+import { useCart } from "@/lib/cart"; import { formatPrice, cartItemPrice } from "@/lib/money";
 import { LICENSES } from "@/lib/licenses";
 import Link from "next/link";
 

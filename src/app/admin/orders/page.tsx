@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createServerSupabase, createServiceSupabase } from "@/lib/supabase";
-import { formatPrice } from "@/lib/cart";
+import { formatPrice } from "@/lib/money";
 
 export const dynamic = "force-dynamic";
 
