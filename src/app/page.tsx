@@ -4,7 +4,7 @@ import { resolveBeatUrls } from "@/lib/format";
 import type { BeatWithUrls } from "@/lib/types";
 import { BeatCard } from "@/components/BeatCard";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 async function getBeats(): Promise<BeatWithUrls[]> {
   const supabase = createServiceSupabase();
@@ -25,7 +25,9 @@ async function getBeats(): Promise<BeatWithUrls[]> {
 
 export default async function HomePage() {
   const beats = await getBeats();
-  const featured = beats.find((b) => b.featured) ?? beats[0];
+  // Featured slot prefers a non-sold beat (no point featuring something no one can buy)
+  const available = beats.filter((b) => !b.exclusive_sold);
+  const featured = available.find((b) => b.featured) ?? available[0] ?? beats[0];
   const newest = beats.filter((b) => b.id !== featured?.id).slice(0, 8);
 
   return (

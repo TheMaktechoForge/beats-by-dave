@@ -4,7 +4,6 @@ import { resolveBeatUrls } from "@/lib/format";
 import type { BeatWithUrls } from "@/lib/types";
 import { WavePlayer } from "@/components/WavePlayer";
 import { LicenseSelector } from "@/components/LicenseSelector";
-import { formatPrice } from "@/lib/money";
 import Link from "next/link";
 
 interface PageProps {
@@ -20,12 +19,12 @@ async function getBeat(slug: string): Promise<BeatWithUrls | null> {
     .eq("published", true)
     .maybeSingle();
   if (error || !data) return null;
-  if (data.exclusive_sold) return null;
+  // Allow viewing sold beats (they show as SOLD in UI), but not unpublished ones.
   const urls = await resolveBeatUrls(data);
   return { ...data, ...urls };
 }
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
@@ -33,7 +32,7 @@ export async function generateMetadata({ params }: PageProps) {
   if (!beat) return { title: "Beat not found" };
   return {
     title: `${beat.title} — Beats by Dave`,
-    description: `${beat.genre ?? "Beat"} • ${beat.bpm ?? "?"} BPM • ${beat.musical_key ?? ""}`.trim(),
+    description: beat.genre ? `${beat.genre} beat by Beats by Dave` : `Beat by Beats by Dave`,
   };
 }
 
@@ -41,6 +40,8 @@ export default async function BeatDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const beat = await getBeat(slug);
   if (!beat) notFound();
+
+  const sold = beat.exclusive_sold;
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-12">
@@ -50,14 +51,29 @@ export default async function BeatDetailPage({ params }: PageProps) {
 
       <div className="grid md:grid-cols-2 gap-10 mt-6">
         <div>
-          {beat.cover_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={beat.cover_url} alt={beat.title} className="w-full aspect-square object-cover rounded-xl border border-[var(--color-border)]" />
-          ) : (
-            <div className="w-full aspect-square bg-gradient-to-br from-[var(--color-bg-elevated)] to-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] flex items-center justify-center">
-              <div className="text-9xl font-black text-[var(--color-accent)] opacity-30">$</div>
-            </div>
-          )}
+          <div className="relative">
+            {beat.cover_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={beat.cover_url} alt={beat.title} className={`w-full aspect-square object-cover rounded-xl border border-[var(--color-border)] ${sold ? "opacity-40" : ""}`} />
+            ) : (
+              <div className={`w-full aspect-square bg-gradient-to-br from-[var(--color-bg-elevated)] to-[var(--color-bg-card)] rounded-xl border border-[var(--color-border)] flex items-center justify-center ${sold ? "opacity-40" : ""}`}>
+                <div className="text-9xl font-black text-[var(--color-accent)] opacity-30">$</div>
+              </div>
+            )}
+            {sold && (
+              <>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="absolute w-[140%] h-0.5 bg-[var(--color-accent)] rotate-45" />
+                  <div className="absolute w-[140%] h-0.5 bg-[var(--color-accent)] -rotate-45" />
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <span className="bg-[var(--color-bg)]/90 text-[var(--color-accent)] font-black text-3xl tracking-widest px-6 py-2 rounded">
+                    SOLD
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         <div>
@@ -65,27 +81,33 @@ export default async function BeatDetailPage({ params }: PageProps) {
             {beat.genre ?? "Beat"}
           </div>
           <h1 className="text-4xl md:text-5xl font-black leading-tight">{beat.title}</h1>
-          <div className="flex flex-wrap gap-4 mt-4 text-sm text-[var(--color-text-muted)]">
-            {beat.bpm && <span><strong className="text-white">{beat.bpm}</strong> BPM</span>}
-            {beat.musical_key && <span><strong className="text-white">{beat.musical_key}</strong></span>}
-            {beat.mood && <span><strong className="text-white">{beat.mood}</strong></span>}
-          </div>
 
           <div className="mt-8">
             <div className="text-xs uppercase tracking-wider text-[var(--color-text-dim)] mb-2">Preview</div>
-            <WavePlayer audio={beat.preview_url} height={80} />
+            {sold ? (
+              <div className="text-center py-8 rounded-lg border border-[var(--color-border)]">
+                <div className="text-2xl font-black text-[var(--color-accent)]">SOLD</div>
+                <div className="text-sm text-[var(--color-text-muted)] mt-2">
+                  Exclusive rights have been transferred. Preview no longer available.
+                </div>
+              </div>
+            ) : (
+              <WavePlayer audio={beat.preview_url} height={80} />
+            )}
           </div>
 
           {beat.description && (
             <p className="mt-8 text-[var(--color-text-muted)] leading-relaxed">{beat.description}</p>
           )}
 
-          <div className="mt-10">
-            <div className="text-xs uppercase tracking-wider text-[var(--color-text-dim)] mb-3">
-              Choose a license
+          {!sold && (
+            <div className="mt-10">
+              <div className="text-xs uppercase tracking-wider text-[var(--color-text-dim)] mb-3">
+                Choose a license
+              </div>
+              <LicenseSelector beat={beat} />
             </div>
-            <LicenseSelector beat={beat} />
-          </div>
+          )}
         </div>
       </div>
     </div>

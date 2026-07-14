@@ -6,9 +6,8 @@ import { nanoid } from "nanoid";
 import { createServiceSupabase } from "@/lib/supabase";
 import { capturePayPalOrder } from "@/lib/paypal";
 import { generateLicensePdf } from "@/lib/licenses";
-import { sendReceipt } from "@/lib/email";
-import { resolveBeatUrls } from "@/lib/format";
-import type { BeatWithUrls, Order } from "@/lib/types";
+import { sendReceipt, sendProducerNotification } from "@/lib/email";
+import type { Order } from "@/lib/types";
 
 interface Body {
   paypalOrderId: string;
@@ -80,36 +79,32 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Order finalize failed" }, { status: 500 });
   }
 
-  // Mark beats sold (exclusives only) so they disappear from the catalog.
+  // Mark beats sold (exclusives only). Keep them published so the catalog
+  // can show them with an SOLD overlay instead of disappearing entirely.
   for (const item of (updated.items as { beat_id: string; license: string }[])) {
     if (item.license === "exclusive") {
       await supabase
         .from("beats")
-        .update({ exclusive_sold: true, published: false })
+        .update({ exclusive_sold: true })
         .eq("id", item.beat_id);
     }
   }
 
-  // Generate and stash license PDFs (lazy: we generate on download too,
-  // but caching them now means the buyer gets a clean URL).
-  // For simplicity we just generate on demand in /api/download/[token].
-  // Email the buyer (best-effort).
+  // Email the buyer and notify the producer (best-effort).
   try {
-    const beatIds = (updated.items as { beat_id: string }[]).map((i) => i.beat_id);
-    const { data: beats } = await supabase.from("beats").select("*").in("id", beatIds);
-    const resolved: BeatWithUrls[] = [];
-    for (const b of beats ?? []) {
-      const urls = await resolveBeatUrls(b);
-      resolved.push({ ...b, ...urls });
-    }
+    const beatTitles = (updated.items as { beat_title: string }[]).map((i) => i.beat_title);
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(req.url).origin;
     await sendReceipt({
       order: updated as Order,
-      beats: resolved,
       downloadUrl: `${siteUrl}/api/download/${token}`,
+      beatTitles,
+    });
+    await sendProducerNotification({
+      order: updated as Order,
+      beatTitles,
     });
   } catch (e) {
-    console.error("Receipt email failed (non-blocking):", e);
+    console.error("Post-purchase email failed (non-blocking):", e);
   }
 
   return NextResponse.json({ downloadToken: token });

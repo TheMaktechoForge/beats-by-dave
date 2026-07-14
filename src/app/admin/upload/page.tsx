@@ -20,9 +20,6 @@ export default function AdminUploadPage() {
   const [form, setForm] = useState({
     title: "",
     genre: "Trap",
-    mood: "",
-    bpm: "",
-    musical_key: "",
     description: "",
     price_mp3: "29.99",
     price_wav: "49.99",
@@ -84,10 +81,6 @@ export default function AdminUploadPage() {
         <Grid>
           <Input label="Beat Title" value={form.title} onChange={(v) => setForm({ ...form, title: v })} required />
           <Input label="Genre" value={form.genre} onChange={(v) => setForm({ ...form, genre: v })} />
-          <Input label="Mood" value={form.mood} onChange={(v) => setForm({ ...form, mood: v })} />
-          <Input label="BPM" type="number" value={form.bpm} onChange={(v) => setForm({ ...form, bpm: v })} />
-          <Input label="Key" value={form.musical_key} onChange={(v) => setForm({ ...form, musical_key: v })} />
-          <div />
           <Textarea
             label="Description"
             value={form.description}

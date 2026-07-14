@@ -1,22 +1,22 @@
 // Email via Resend. Used by the post-payment success page to
-// send a receipt + signed download links to the buyer.
-//
-// Order receipt template is inline for simplicity. If we ever
-// need transactional templates with logo, dark mode, etc., move
-// to React Email (resend/react-email).
+// send a receipt + signed download links to the buyer, and a
+// producer notification to the artist on every order.
 
 import { Resend } from "resend";
-import type { Order, BeatWithUrls } from "./types";
+import type { Order } from "./types";
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
+const FROM = process.env.RESEND_FROM ?? "Beats by Dave <beats@beatsbydave.com>";
+const PRODUCER_NOTIFICATION_TO = process.env.PRODUCER_NOTIFICATION_EMAIL ?? "tr3@themaktechoforge.com";
+
 export interface ReceiptInput {
   order: Order;
-  beats: BeatWithUrls[];
   downloadUrl: string;
+  beatTitles: string[];
 }
 
-export async function sendReceipt({ order, beats, downloadUrl }: ReceiptInput) {
+export async function sendReceipt({ order, downloadUrl, beatTitles }: ReceiptInput) {
   if (!resend) {
     console.warn("RESEND_API_KEY missing — skipping receipt email");
     return;
@@ -25,10 +25,7 @@ export async function sendReceipt({ order, beats, downloadUrl }: ReceiptInput) {
   if (!to) return;
 
   const items = order.items
-    .map((i) => {
-      const beat = beats.find((b) => b.id === i.beat_id);
-      return `<li><strong>${escapeHtml(i.beat_title)}</strong> — ${i.license.toUpperCase()} — $${(i.price_cents / 100).toFixed(2)}</li>`;
-    })
+    .map((i) => `<li><strong>${escapeHtml(i.beat_title)}</strong> — ${i.license.toUpperCase()} — $${(i.price_cents / 100).toFixed(2)}</li>`)
     .join("");
 
   const html = `
@@ -57,11 +54,62 @@ export async function sendReceipt({ order, beats, downloadUrl }: ReceiptInput) {
   `;
 
   await resend.emails.send({
-    from: process.env.RESEND_FROM ?? "Beats by Dave <beats@beatsbydave.com>",
+    from: FROM,
     to,
     subject: `Your Beats by Dave order #${order.id.slice(0, 8).toUpperCase()}`,
     html,
   });
+}
+
+export interface ProducerNotificationInput {
+  order: Order;
+  beatTitles: string[];
+}
+
+export async function sendProducerNotification({ order, beatTitles }: ProducerNotificationInput) {
+  if (!resend) {
+    console.warn("RESEND_API_KEY missing — skipping producer notification");
+    return;
+  }
+
+  const items = order.items
+    .map((i) => `<li><strong>${escapeHtml(i.beat_title)}</strong> — ${i.license.toUpperCase()} — $${(i.price_cents / 100).toFixed(2)}</li>`)
+    .join("");
+
+  const sold = order.items.some((i) => i.license === "exclusive");
+
+  const html = `
+    <div style="background:#0b0b0d;color:#fff;font-family:system-ui;padding:40px 20px;">
+      <div style="max-width:560px;margin:0 auto;background:#16161a;border-radius:12px;padding:32px;">
+        <h1 style="margin:0 0 8px;color:#ff8a00;font-size:14px;letter-spacing:2px;">NEW SALE</h1>
+        <h2 style="margin:0 0 24px;font-size:22px;">${
+          sold ? "🧡 Exclusive sold" : "Order received"
+        }</h2>
+        <p style="color:#b8b8c2;line-height:1.6;">
+          <strong>Order:</strong> #${order.id.slice(0, 8).toUpperCase()}<br/>
+          <strong>Buyer:</strong> ${escapeHtml(order.payer_name ?? "—")} &lt;${escapeHtml(order.payer_email ?? "—")}&gt;<br/>
+          <strong>Total:</strong> $${(order.total_cents / 100).toFixed(2)}<br/>
+          <strong>Time:</strong> ${new Date(order.created_at).toLocaleString("en-US")}
+        </p>
+        <ul style="color:#fff;line-height:1.8;padding-left:18px;">${items}</ul>
+        ${sold ? '<p style="color:#ff8a00;margin-top:24px;"><strong>Note:</strong> The beat has been marked SOLD and removed from public sale. Customer has been emailed download links.</p>' : ""}
+      </div>
+    </div>
+  `;
+
+  try {
+    await resend.emails.send({
+      from: FROM,
+      to: PRODUCER_NOTIFICATION_TO,
+      subject: sold
+        ? `🧡 EXCLUSIVE SOLD — ${order.items[0]?.beat_title ?? "Beat"} — $${(order.total_cents / 100).toFixed(2)}`
+        : `New sale: ${beatTitles.length} beat${beatTitles.length === 1 ? "" : "s"} — $${(order.total_cents / 100).toFixed(2)}`,
+      html,
+    });
+  } catch (e) {
+    // Producer notification failure must NOT block the buyer's flow.
+    console.error("Producer notification failed:", e);
+  }
 }
 
 function escapeHtml(s: string) {

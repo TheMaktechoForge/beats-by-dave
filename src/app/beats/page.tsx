@@ -3,15 +3,15 @@ import { resolveBeatUrls } from "@/lib/format";
 import type { BeatWithUrls } from "@/lib/types";
 import { BeatCard } from "@/components/BeatCard";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 async function getBeats(): Promise<BeatWithUrls[]> {
   const supabase = createServiceSupabase();
+  // Show all published beats, including sold ones (they get an X overlay).
   const { data, error } = await supabase
     .from("beats")
     .select("*")
     .eq("published", true)
-    .eq("exclusive_sold", false)
     .order("created_at", { ascending: false });
   if (error || !data) return [];
   const out: BeatWithUrls[] = [];
@@ -25,6 +25,8 @@ async function getBeats(): Promise<BeatWithUrls[]> {
 export default async function BeatsPage() {
   const beats = await getBeats();
   const genres = Array.from(new Set(beats.map((b) => b.genre).filter(Boolean))) as string[];
+  const available = beats.filter((b) => !b.exclusive_sold).length;
+  const sold = beats.length - available;
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
@@ -33,7 +35,9 @@ export default async function BeatsPage() {
           <div className="text-xs uppercase tracking-[0.25em] text-[var(--color-accent)] mb-2">Catalog</div>
           <h1 className="text-4xl md:text-5xl font-black">All Beats</h1>
           <p className="text-[var(--color-text-muted)] mt-2">
-            {beats.length} beat{beats.length === 1 ? "" : "s"} available. Click any beat to preview and license.
+            {available} beat{available === 1 ? "" : "s"} available
+            {sold > 0 ? `, ${sold} sold` : ""}.
+            {" "}Click any beat to preview and license.
           </p>
         </div>
       </div>

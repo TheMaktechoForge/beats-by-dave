@@ -13,7 +13,7 @@ export default async function AdminBeatsPage() {
   const admin = createServiceSupabase();
   const { data: beats } = await admin
     .from("beats")
-    .select("id, slug, title, genre, bpm, published, exclusive_sold, price_mp3_cents, created_at")
+    .select("id, slug, title, genre, published, exclusive_sold, price_mp3_cents, created_at")
     .order("created_at", { ascending: false });
 
   return (
@@ -34,7 +34,6 @@ export default async function AdminBeatsPage() {
               <tr>
                 <th className="text-left p-3">Title</th>
                 <th className="text-left p-3">Genre</th>
-                <th className="text-left p-3">BPM</th>
                 <th className="text-left p-3">From</th>
                 <th className="text-left p-3">Status</th>
                 <th className="text-left p-3">Added</th>
@@ -49,7 +48,7 @@ export default async function AdminBeatsPage() {
                     </Link>
                   </td>
                   <td className="p-3 text-[var(--color-text-muted)]">{b.genre ?? "—"}</td>
-                  <td className="p-3">{b.bpm ?? "—"}</td>
+                  
                   <td className="p-3">{b.price_mp3_cents ? formatPrice(b.price_mp3_cents) : "—"}</td>
                   <td className="p-3">
                     {b.exclusive_sold ? (
