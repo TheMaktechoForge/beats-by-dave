@@ -9,13 +9,11 @@ export default function ContactPage() {
       </p>
 
       <div className="card p-6 space-y-4 text-sm">
-        <Row label="Email" value="dave@beatsbydave.com" href="mailto:dave@beatsbydave.com" />
-        <Row label="Instagram" value="@beatsbydave" href="https://instagram.com/" />
-        <Row label="YouTube" value="@beatsbydave" href="https://youtube.com/" />
+        <Row label="Email" value="chadavbeats@gmail.com" href="mailto:chadavbeats@gmail.com" />
       </div>
 
       <p className="mt-8 text-xs text-[var(--color-text-dim)]">
-        Replace the email and social handles above with your real ones before going live.
+        For licensing questions, bulk deals, custom beats, or anything else — email is the fastest path.
       </p>
     </div>
   );

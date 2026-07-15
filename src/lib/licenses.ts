@@ -144,7 +144,7 @@ export async function generateLicensePdf(input: PdfInput): Promise<Uint8Array> {
   // Footer
   page.drawText(
     "This license is a non-exclusive agreement unless Exclusive Rights are purchased. " +
-      "By downloading the beat, the Licensee agrees to the full terms at beatsbydave.com/terms.",
+      "By downloading the beat, the Licensee agrees to the full terms at beats.themaktechoforge.com/terms.",
     { x: 50, y: 50, size: 8, font, color: muted, maxWidth: 512, lineHeight: 10 }
   );
 

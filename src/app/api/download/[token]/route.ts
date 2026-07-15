@@ -127,7 +127,7 @@ function renderDownloadPage(
       <thead><tr><th>Beat</th><th>License</th><th>Audio</th><th>License PDF</th></tr></thead>
       <tbody>${itemsHtml}</tbody>
     </table>
-    <footer>Beats by Dave · beatsbydave.com</footer>
+    <footer>Beats by Dave · beats.themaktechoforge.com</footer>
   </div>
 </body>
 </html>`;
