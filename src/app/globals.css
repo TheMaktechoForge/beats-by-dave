@@ -8,9 +8,9 @@
   --color-text: #ffffff;
   --color-text-muted: #b8b8c2;
   --color-text-dim: #6c6c75;
-  --color-accent: #ff8a00;
-  --color-accent-hot: #ff5e00;
-  --color-neon: #39ff14;
+  --color-accent: #B5D300;
+  --color-accent-hot: #9DAA00;
+  --color-neon: #9B30FF;
 }
 
 @layer base {

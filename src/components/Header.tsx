@@ -14,12 +14,13 @@ export function Header() {
     <header className="sticky top-0 z-40 backdrop-blur-md bg-[var(--color-bg)]/85 border-b border-[var(--color-border)]">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-md bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-hot)] flex items-center justify-center text-black font-black">
-            $
+          <div className="w-10 h-10 rounded-md overflow-hidden bg-black shrink-0 border border-[var(--color-border)]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo-noface.png" alt="Beats by Dave" className="w-full h-full object-contain" />
           </div>
           <div>
             <div className="font-black tracking-tight text-lg leading-none">BEATS BY DAVE</div>
-            <div className="text-[10px] text-[var(--color-text-dim)] tracking-[0.25em] leading-none mt-1">PREMIUM BEATS</div>
+            <div className="text-[10px] text-[var(--color-accent)] tracking-[0.25em] leading-none mt-1">PREMIUM BEATS</div>
           </div>
         </Link>
 

@@ -108,12 +108,12 @@ function renderDownloadPage(
   .wrap { max-width: 760px; margin: 0 auto; background:#16161a; border:1px solid #2a2a31; border-radius: 12px; padding: 32px; }
   h1 { margin: 0 0 8px; }
   .sub { color:#b8b8c2; margin: 0 0 24px; }
-  .expires { color:#ff8a00; font-size: 13px; margin: 0 0 24px; }
+  .expires { color:#B5D300; font-size: 13px; margin: 0 0 24px; }
   table { width: 100%; border-collapse: collapse; }
   th, td { text-align: left; padding: 12px 8px; border-bottom: 1px solid #2a2a31; font-size: 14px; }
   th { color:#b8b8c2; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.15em; }
-  a.dl { background:#ff8a00; color:#000; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 700; }
-  a.dl:hover { background:#ff5e00; }
+  a.dl { background:#B5D300; color:#000; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 700; }
+  a.dl:hover { background:#9DAA00; }
   .muted { color:#6c6c75; }
   footer { margin-top: 32px; color:#6c6c75; font-size: 12px; }
 </style>

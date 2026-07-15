@@ -33,33 +33,34 @@ export default async function HomePage() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-accent)]/10 via-transparent to-[var(--color-neon)]/5" />
-        <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 relative">
-          <div className="inline-block px-3 py-1 mb-6 rounded-full border border-[var(--color-border)] text-xs tracking-[0.25em] text-[var(--color-text-muted)]">
-            PREMIUM BEATS BY DAVE
-          </div>
-          <h1 className="text-5xl md:text-7xl font-black leading-[1.05] tracking-tight max-w-3xl">
-            Beats that <span className="text-[var(--color-accent)]">hit different.</span>
-          </h1>
-          <p className="mt-6 text-lg text-[var(--color-text-muted)] max-w-xl">
-            Hip-Hop, Trap, and R&B instrumentals with instant download and clear licensing.
-            Built for artists who want to cook, not chase paperwork.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-3">
-            <Link href="/beats" className="btn-primary text-base">
-              Browse Beats
-            </Link>
-            <Link href="/licenses" className="btn-ghost text-base">
-              See Licenses
-            </Link>
-          </div>
+      <section className="relative overflow-hidden border-b border-[var(--color-border)]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/banner.png"
+          alt="Beats by Dave — Beats that hit different"
+          className="w-full h-auto block"
+        />
+      </section>
 
-          <div className="mt-16 grid grid-cols-3 gap-8 max-w-md text-sm">
-            <Stat label="Beats" value={String(beats.length)} />
-            <Stat label="Licenses" value="4 tiers" />
-            <Stat label="Delivery" value="Instant" />
+      <section className="max-w-6xl mx-auto px-6 pt-16 pb-16">
+        <div className="flex flex-wrap items-center justify-between gap-6 mb-10">
+          <div>
+            <div className="inline-block px-3 py-1 mb-3 rounded-full border border-[var(--color-border)] text-xs tracking-[0.25em] text-[var(--color-accent)]">
+              PREMIUM BEATS BY DAVE
+            </div>
+            <h2 className="text-3xl md:text-4xl font-black leading-tight max-w-2xl">
+              Instrumentals with instant download and clear licensing.
+            </h2>
           </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/beats" className="btn-primary text-base">Browse Beats</Link>
+            <Link href="/licenses" className="btn-ghost text-base">See Licenses</Link>
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-6 max-w-md text-sm">
+          <Stat label="Beats" value={String(beats.length)} />
+          <Stat label="Licenses" value="4 tiers" />
+          <Stat label="Delivery" value="Instant" />
         </div>
       </section>
 

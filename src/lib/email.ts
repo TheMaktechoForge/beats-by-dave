@@ -31,18 +31,18 @@ export async function sendReceipt({ order, downloadUrl, beatTitles }: ReceiptInp
   const html = `
     <div style="background:#0b0b0d;color:#fff;font-family:system-ui;padding:40px 20px;">
       <div style="max-width:560px;margin:0 auto;background:#16161a;border-radius:12px;padding:32px;">
-        <h1 style="margin:0 0 8px;color:#ff8a00;font-size:14px;letter-spacing:2px;">BEATS BY DAVE</h1>
+        <h1 style="margin:0 0 8px;color:#B5D300;font-size:14px;letter-spacing:2px;">BEATS BY DAVE</h1>
         <h2 style="margin:0 0 24px;font-size:24px;">Thanks for your purchase 🧡</h2>
         <p style="color:#b8b8c2;line-height:1.6;">
           Your order #${order.id.slice(0, 8).toUpperCase()} is confirmed. Total charged: $${(order.total_cents / 100).toFixed(2)}.
         </p>
         <ul style="color:#fff;line-height:1.8;padding-left:18px;">${items}</ul>
         <div style="margin:24px 0;padding:16px;border:1px solid #2a2a31;border-radius:8px;">
-          <strong style="color:#ff8a00;">Download your beats</strong>
+          <strong style="color:#B5D300;">Download your beats</strong>
           <p style="margin:8px 0 16px;color:#b8b8c2;font-size:14px;">
             This link expires in ${Math.round((new Date(order.download_expires_at!).getTime() - Date.now()) / 36e5)} hours. Save the files now.
           </p>
-          <a href="${downloadUrl}" style="display:inline-block;background:#ff8a00;color:#000;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:700;">
+          <a href="${downloadUrl}" style="display:inline-block;background:#B5D300;color:#000;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:700;">
             Download Files
           </a>
         </div>
@@ -81,7 +81,7 @@ export async function sendProducerNotification({ order, beatTitles }: ProducerNo
   const html = `
     <div style="background:#0b0b0d;color:#fff;font-family:system-ui;padding:40px 20px;">
       <div style="max-width:560px;margin:0 auto;background:#16161a;border-radius:12px;padding:32px;">
-        <h1 style="margin:0 0 8px;color:#ff8a00;font-size:14px;letter-spacing:2px;">NEW SALE</h1>
+        <h1 style="margin:0 0 8px;color:#B5D300;font-size:14px;letter-spacing:2px;">NEW SALE</h1>
         <h2 style="margin:0 0 24px;font-size:22px;">${
           sold ? "🧡 Exclusive sold" : "Order received"
         }</h2>
@@ -92,7 +92,7 @@ export async function sendProducerNotification({ order, beatTitles }: ProducerNo
           <strong>Time:</strong> ${new Date(order.created_at).toLocaleString("en-US")}
         </p>
         <ul style="color:#fff;line-height:1.8;padding-left:18px;">${items}</ul>
-        ${sold ? '<p style="color:#ff8a00;margin-top:24px;"><strong>Note:</strong> The beat has been marked SOLD and removed from public sale. Customer has been emailed download links.</p>' : ""}
+        ${sold ? '<p style="color:#B5D300;margin-top:24px;"><strong>Note:</strong> The beat has been marked SOLD and removed from public sale. Customer has been emailed download links.</p>' : ""}
       </div>
     </div>
   `;
