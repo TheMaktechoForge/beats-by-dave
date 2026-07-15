@@ -7,6 +7,10 @@ import type { Order } from "./types";
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
+// FROM intentionally defaults to the beatsbydave.com sender — that's the
+// address Resend has verified. The marketing domain (themaktechoforge.com)
+// is not a verified Resend sender, so falling back to it would break sends
+// silently if RESEND_FROM ever goes missing.
 const FROM = process.env.RESEND_FROM ?? "Beats by Dave <beats@beatsbydave.com>";
 const PRODUCER_NOTIFICATION_TO = process.env.PRODUCER_NOTIFICATION_EMAIL ?? "tr3@themaktechoforge.com";
 
