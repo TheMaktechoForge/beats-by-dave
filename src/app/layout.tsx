@@ -18,6 +18,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <Header />
+        <div className="page-marquee" aria-hidden="true">
+          <div className="page-marquee__track">
+            <span>● NEW BEAT DROP — SOUTHERN DOG 17</span>
+            <span>● INSTANT DOWNLOAD — MP3 / WAV / STEMS</span>
+            <span>● CUSTOM LICENSES — STARTING AT $29.99</span>
+            <span>● EXCLUSIVE RIGHTS — NEGOTIABLE</span>
+            <span>● NEW BEAT DROP — SOUTHERN DOG 17</span>
+            <span>● INSTANT DOWNLOAD — MP3 / WAV / STEMS</span>
+            <span>● CUSTOM LICENSES — STARTING AT $29.99</span>
+            <span>● EXCLUSIVE RIGHTS — NEGOTIABLE</span>
+          </div>
+        </div>
         <main>{children}</main>
         <Footer />
       </body>

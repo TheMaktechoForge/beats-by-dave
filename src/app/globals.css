@@ -18,11 +18,55 @@
     color-scheme: dark;
   }
   html, body {
-    background: var(--color-bg);
     color: var(--color-text);
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
+    min-height: 100%;
   }
+
+  /* Layered animated background:
+     layer 0: solid base
+     layer 1: 3 drifting radial-gradient blobs (green / violet / magenta)
+     layer 2: SVG noise grain (texture)
+     layer 3: subtle scanlines (CRT mixtape vibe)
+  */
+  body {
+    position: relative;
+    background-color: #06080d;
+    background-image:
+      radial-gradient(900px 600px at 12% 8%, rgba(181, 211, 0, 0.22), transparent 60%),
+      radial-gradient(700px 500px at 88% 22%, rgba(155, 48, 255, 0.28), transparent 65%),
+      radial-gradient(900px 700px at 50% 95%, rgba(255, 60, 180, 0.18), transparent 70%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.045 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-attachment: fixed, fixed, fixed, fixed;
+    background-size: auto, auto, auto, 220px 220px;
+    animation: bg-shift 32s ease-in-out infinite alternate;
+  }
+  body::before {
+    /* Scanlines — very subtle */
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.025) 0px,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    background-size: 100% 3px;
+    mix-blend-mode: overlay;
+    z-index: 0;
+  }
+  body > * { position: relative; z-index: 1; }
+
+  @keyframes bg-shift {
+    0%   { background-position:   0%   0%,   0%   0%,   0%   0%,   0   0; }
+    50%  { background-position:  10%  15%, -10%   5%,   5% -10%,  60px 40px; }
+    100% { background-position:  -5%  -5%,  10%  10%,  -5%   5%, 120px 80px; }
+  }
+
   ::selection {
     background: var(--color-accent);
     color: #000;
@@ -58,16 +102,45 @@
   .btn-ghost:hover { border-color: var(--color-accent); color: var(--color-accent); }
 
   .card {
-    background: var(--color-bg-card);
+    background: rgba(22, 22, 26, 0.72);
     border: 1px solid var(--color-border);
     border-radius: 0.75rem;
     overflow: hidden;
-    transition: transform 200ms, border-color 200ms;
+    position: relative;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: transform 220ms cubic-bezier(.2, .8, .2, 1),
+                border-color 220ms,
+                box-shadow 220ms;
+  }
+  .card::before {
+    /* Sheen that sweeps across on hover */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 38%,
+      rgba(181, 211, 0, 0.18) 50%,
+      rgba(155, 48, 255, 0.18) 52%,
+      transparent 64%,
+      transparent 100%
+    );
+    transform: translateX(-110%);
+    transition: transform 700ms cubic-bezier(.2, .8, .2, 1);
+    pointer-events: none;
+    z-index: 1;
   }
   .card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
     border-color: var(--color-accent);
+    box-shadow:
+      0 18px 40px -18px rgba(181, 211, 0, 0.45),
+      0 12px 32px -16px rgba(155, 48, 255, 0.40);
   }
+  .card:hover::before { transform: translateX(110%); }
+  .card > * { position: relative; z-index: 2; }
 }
 
 /* Custom waveform styling — neon when playing */
@@ -81,3 +154,66 @@
 ::-webkit-scrollbar-track { background: var(--color-bg); }
 ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 8px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-text-dim); }
+/* Header glass + animated neon underline */
+.site-header { position: sticky; top: 0; backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); background: rgba(6, 8, 13, 0.55); }
+.site-header::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--color-accent) 30%, var(--color-neon) 70%, transparent 100%);
+  background-size: 200% 100%;
+  animation: header-line 8s linear infinite;
+}
+@keyframes header-line {
+  0%   { background-position:   0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Marquee bar at top of page (fixed thin strip with slide text) */
+.page-marquee {
+  position: fixed;
+  top: 65px;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  overflow: hidden;
+  pointer-events: none;
+  border-block: 1px solid rgba(155, 48, 255, 0.35);
+  background: rgba(155, 48, 255, 0.10);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.page-marquee__track {
+  display: inline-flex;
+  white-space: nowrap;
+  padding-block: 4px;
+  animation: marquee 38s linear infinite;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+.page-marquee__track span { padding-inline: 28px; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* "Now playing" dot — tiny pulse inline */
+.live-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent);
+  animation: pulse 1.6s ease-in-out infinite;
+  margin-right: 6px;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .35; transform: scale(.6); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-marquee__track, .site-header::after, body { animation: none !important; }
+}

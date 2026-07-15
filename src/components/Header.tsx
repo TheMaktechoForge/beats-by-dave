@@ -11,7 +11,7 @@ export function Header() {
   const count = mounted ? items.length : 0;
 
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-md bg-[var(--color-bg)]/85 border-b border-[var(--color-border)]">
+    <header className="site-header sticky top-0 z-40 bg-black/40 backdrop-blur-xl border-b border-[var(--color-border)] shadow-[0_1px_0_0_rgba(181,211,0,0.18),0_12px_30px_-12px_rgba(0,0,0,0.8)]">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-md overflow-hidden bg-black shrink-0 border border-[var(--color-border)]">
