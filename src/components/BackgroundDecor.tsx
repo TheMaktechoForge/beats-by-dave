@@ -12,11 +12,18 @@ const BEAT_COVERS: { path: string; x: string; y: string; size: number; dur: numb
 ];
 
 export async function BackgroundDecor() {
+  // Sign each cover URL individually with a try/catch so one missing
+  // object can't take the whole page down (and so the prerender step
+  // doesn't fail the build).
   const covers = await Promise.all(
-    BEAT_COVERS.map(async (c) => ({
-      ...c,
-      url: await getSignedUrl(c.path, 60 * 60 * 24 * 7), // 7 days
-    }))
+    BEAT_COVERS.map(async (c) => {
+      try {
+        const url = await getSignedUrl(c.path, 60 * 60 * 24 * 7); // 7 days
+        return { ...c, url };
+      } catch {
+        return { ...c, url: null };
+      }
+    })
   );
 
   return (
@@ -29,8 +36,8 @@ export async function BackgroundDecor() {
       {/* central soft glow that breathes */}
       <div className="bg-decor__core" />
 
-      {/* floating covers */}
-      {covers.map((c, i) => (
+      {/* floating covers — skip ones that failed to sign */}
+      {covers.filter((c) => c.url).map((c) => (
         <div
           key={c.path}
           className="bg-decor__cover"
@@ -46,7 +53,7 @@ export async function BackgroundDecor() {
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={c.url} alt="" />
+          <img src={c.url!} alt="" />
         </div>
       ))}
 
