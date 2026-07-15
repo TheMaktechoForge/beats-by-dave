@@ -101,6 +101,16 @@ export default async function BeatDetailPage({ params }: PageProps) {
           )}
 
           {!sold && (
+            <div className="mt-8 rounded-lg border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/5 p-4">
+              <div className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent)] font-bold mb-1">Bundle promo</div>
+              <div className="text-[var(--color-text)] font-bold">Any 2 MP3 leases for $20</div>
+              <div className="text-sm text-[var(--color-text-muted)] mt-1">
+                Reach out via the <Link href="/contact" className="text-[var(--color-accent)] hover:underline font-medium">contact page</Link> to claim — not available at checkout.
+              </div>
+            </div>
+          )}
+
+          {!sold && (
             <div className="mt-10">
               <div className="text-xs uppercase tracking-wider text-[var(--color-text-dim)] mb-3">
                 Choose a license

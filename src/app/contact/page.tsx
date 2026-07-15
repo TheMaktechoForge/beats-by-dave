@@ -8,6 +8,14 @@ export default function ContactPage() {
         I respond within a couple of days.
       </p>
 
+      <div className="card p-4 mb-6 bg-[var(--color-accent)]/10 border-[var(--color-accent)]/40">
+        <div className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent)] font-bold mb-1">Current bundle promo</div>
+        <div className="text-sm text-[var(--color-text)] font-bold">Any 2 MP3 leases for $20</div>
+        <div className="text-sm text-[var(--color-text-muted)] mt-1">
+          Just mention &ldquo;bundle&rdquo; in your message and I&apos;ll set it up manually.
+        </div>
+      </div>
+
       <div className="card p-6 space-y-4 text-sm">
         <Row label="Email" value="chadavbeats@gmail.com" href="mailto:chadavbeats@gmail.com" />
       </div>
