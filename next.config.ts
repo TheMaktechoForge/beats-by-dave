@@ -31,6 +31,11 @@ const nextConfig: NextConfig = {
         destination: "/beats/southern-dog-4-trap-god",
         permanent: true,
       },
+      {
+        source: "/beats/having-thangs",
+        destination: "/beats/southern-dog-3",
+        permanent: true,
+      },
     ];
   },
 };
