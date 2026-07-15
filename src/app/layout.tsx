@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { BackgroundDecor } from "@/components/BackgroundDecor";
 
 export const metadata: Metadata = {
  title: "Beats by Dave: Premium Hip-Hop, Trap & R&B Beats",
@@ -13,10 +14,11 @@ export const metadata: Metadata = {
  },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
  return (
  <html lang="en">
  <body>
+ <BackgroundDecor />
  <Header />
  <div className="page-marquee" aria-hidden="true">
  <div className="page-marquee__track">
