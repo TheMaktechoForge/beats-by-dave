@@ -12,7 +12,7 @@ export default function ContactPage() {
         <div className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent)] font-bold mb-1">Current bundle promo</div>
         <div className="text-sm text-[var(--color-text)] font-bold">Any 2 MP3 leases for $20</div>
         <div className="text-sm text-[var(--color-text-muted)] mt-1">
-          Just mention &ldquo;bundle&rdquo; in your message and I&apos;ll set it up manually.
+          Just mention "bundle" in your message and I&apos;ll set it up manually.
         </div>
       </div>
 
@@ -21,7 +21,7 @@ export default function ContactPage() {
       </div>
 
       <p className="mt-8 text-xs text-[var(--color-text-dim)]">
-        For licensing questions, bulk deals, custom beats, or anything else — email is the fastest path.
+        For licensing questions, bulk deals, custom beats, or anything else: email is the fastest path.
       </p>
     </div>
   );

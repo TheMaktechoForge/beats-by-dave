@@ -105,7 +105,7 @@ export default async function BeatDetailPage({ params }: PageProps) {
               <div className="text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent)] font-bold mb-1">Bundle promo</div>
               <div className="text-[var(--color-text)] font-bold">Any 2 MP3 leases for $20</div>
               <div className="text-sm text-[var(--color-text-muted)] mt-1">
-                Reach out via the <Link href="/contact" className="text-[var(--color-accent)] hover:underline font-medium">contact page</Link> to claim — not available at checkout.
+                Reach out via the <Link href="/contact" className="text-[var(--color-accent)] hover:underline font-medium">contact page</Link> to claim (not available at checkout).
               </div>
             </div>
           )}

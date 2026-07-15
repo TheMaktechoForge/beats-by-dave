@@ -16,7 +16,7 @@ export default function TermsPage() {
           <li>The license is non-exclusive and non-transferable.</li>
           <li>The licensee (you) owns 100% of the master and publishing rights to the resulting song, subject to a 50% publishing royalty to the producer.</li>
           <li>The producer must be credited: "Produced by Beats by Dave".</li>
-          <li>Distribution caps per tier: MP3 — $10K, WAV — $50K, Trackouts — $250K gross revenue. Above the cap, upgrade to the next tier or contact for exclusive rights.</li>
+          <li>Distribution caps per tier: MP3 $10K, WAV $50K, Trackouts $250K gross revenue. Above the cap, upgrade to the next tier or contact for exclusive rights.</li>
           <li>Reselling the beat or redistributing the audio file is prohibited.</li>
         </ul>
 
