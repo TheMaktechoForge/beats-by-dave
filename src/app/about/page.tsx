@@ -1,10 +1,14 @@
-export default function AboutPage() {
+import { getSignedUrl } from "@/lib/supabase";
+
+export default async function AboutPage() {
+  const faceUrl = await getSignedUrl("about/face.png");
+
   return (
     <div className="max-w-2xl mx-auto px-6 py-16">
       <div className="flex flex-col items-center text-center mb-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://gmagxgctfrkwdevzqjnd.supabase.co/storage/v1/object/sign/media/about/face.png"
+          src={faceUrl}
           alt="Beats by Dave"
           className="w-40 h-40 md:w-48 md:h-48 rounded-full border-2 border-[var(--color-accent)] object-cover shadow-[0_8px_30px_-8px_rgba(0,0,0,0.6)] mb-6"
         />
