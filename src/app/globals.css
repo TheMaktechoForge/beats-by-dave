@@ -372,7 +372,112 @@
   100% { top: 120%; }
 }
 
+/* --- Sound Wave Backdrop --- */
+.bg-decor__wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 200px;
+  opacity: 0.45;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bg-decor__wave svg {
+  width: 100%;
+  height: 100%;
+}
+.bg-decor__wave-path {
+  transform-origin: bottom center;
+  will-change: transform;
+}
+.bg-decor__wave-path--a {
+  animation: wave-slide-a 18s ease-in-out infinite alternate;
+}
+.bg-decor__wave-path--b {
+  animation: wave-slide-b 22s ease-in-out infinite alternate;
+}
+@keyframes wave-slide-a {
+  0% { transform: translateX(-3%) scaleY(0.9); }
+  50% { transform: translateX(3%) scaleY(1.05); }
+  100% { transform: translateX(-3%) scaleY(0.95); }
+}
+@keyframes wave-slide-b {
+  0% { transform: translateX(3%) scaleY(1.05); }
+  50% { transform: translateX(-3%) scaleY(0.9); }
+  100% { transform: translateX(3%) scaleY(1); }
+}
+
+/* --- Ambient Particles --- */
+.bg-decor__particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bg-decor__particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  filter: blur(0.5px);
+  will-change: transform, opacity;
+  animation: particle-drift infinite ease-in-out alternate;
+}
+.bg-decor__particle--lime {
+  background: #B5D300;
+  box-shadow: 0 0 6px rgba(181, 211, 0, 0.4);
+}
+.bg-decor__particle--violet {
+  background: #9B30FF;
+  box-shadow: 0 0 6px rgba(155, 48, 255, 0.4);
+}
+.bg-decor__particle--magenta {
+  background: #FF3CB4;
+  box-shadow: 0 0 6px rgba(255, 60, 180, 0.4);
+}
+@keyframes particle-drift {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.04; }
+  50% { transform: translate(20px, -25px) scale(1.15); opacity: 0.12; }
+  100% { transform: translate(-15px, -50px) scale(0.9); opacity: 0.03; }
+}
+
+/* --- Floating Music Notes --- */
+.bg-decor__notes {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bg-decor__note {
+  position: absolute;
+  opacity: 0.04;
+  font-weight: bold;
+  transform-origin: center;
+  will-change: transform, opacity;
+  animation: note-drift infinite ease-in-out alternate;
+}
+.bg-decor__note--lime {
+  color: #B5D300;
+  text-shadow: 0 0 4px rgba(181, 211, 0, 0.3);
+}
+.bg-decor__note--violet {
+  color: #9B30FF;
+  text-shadow: 0 0 4px rgba(155, 48, 255, 0.3);
+}
+.bg-decor__note--magenta {
+  color: #FF3CB4;
+  text-shadow: 0 0 4px rgba(255, 60, 180, 0.3);
+}
+@keyframes note-drift {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0.02; }
+  50% { transform: translate(-15px, -30px) rotate(10deg); opacity: 0.05; }
+  100% { transform: translate(15px, -60px) rotate(-10deg); opacity: 0.01; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .bg-decor, .bg-decor__wash, .bg-decor__core, .bg-decor__cover,
-  .bg-decor__eq-bar, .bg-decor__scan { animation: none !important; }
+  .bg-decor__eq-bar, .bg-decor__scan, .bg-decor__wave-path--a,
+  .bg-decor__wave-path--b, .bg-decor__particle, .bg-decor__note {
+    animation: none !important;
+  }
 }

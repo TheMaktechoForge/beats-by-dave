@@ -36,6 +36,90 @@ export async function BackgroundDecor() {
       {/* central soft glow that breathes */}
       <div className="bg-decor__core" />
 
+      {/* sound waves backdrop at the bottom */}
+      <div className="bg-decor__wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 200" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="wave-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#B5D300" stopOpacity="0.08" />
+              <stop offset="50%" stopColor="#9B30FF" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#FF3CB4" stopOpacity="0.08" />
+            </linearGradient>
+            <linearGradient id="wave-grad-2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#FF3CB4" stopOpacity="0.05" />
+              <stop offset="50%" stopColor="#B5D300" stopOpacity="0.12" />
+              <stop offset="100%" stopColor="#9B30FF" stopOpacity="0.05" />
+            </linearGradient>
+          </defs>
+          <path
+            className="bg-decor__wave-path bg-decor__wave-path--a"
+            d="M0 100 Q 360 40, 720 100 T 1440 100 L 1440 200 L 0 200 Z"
+            fill="url(#wave-grad)"
+          />
+          <path
+            className="bg-decor__wave-path bg-decor__wave-path--b"
+            d="M0 120 Q 360 180, 720 120 T 1440 120 L 1440 200 L 0 200 Z"
+            fill="url(#wave-grad-2)"
+          />
+        </svg>
+      </div>
+
+      {/* subtle floating background particles */}
+      <div className="bg-decor__particles">
+        {Array.from({ length: 18 }).map((_, i) => {
+          const colors = ["lime", "violet", "magenta"];
+          const color = colors[i % 3];
+          const left = `${(i * 7 + 11) % 95}%`;
+          const top = `${(i * 13 + 7) % 85}%`;
+          const size = 3 + (i % 3); // 3px to 5px
+          const dur = 16 + (i % 5) * 4; // 16s to 32s
+          const delay = -(i * 1.8) % dur;
+          return (
+            <span
+              key={i}
+              className={`bg-decor__particle bg-decor__particle--${color}`}
+              style={{
+                left,
+                top,
+                width: `${size}px`,
+                height: `${size}px`,
+                animationDuration: `${dur}s`,
+                animationDelay: `${delay}s`,
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* floating musical symbols */}
+      <div className="bg-decor__notes">
+        {Array.from({ length: 6 }).map((_, i) => {
+          const symbols = ["♩", "♪", "♫", "♬", "♯", "♭"];
+          const colors = ["lime", "violet", "magenta"];
+          const symbol = symbols[i % symbols.length];
+          const color = colors[i % 3];
+          const left = `${(i * 17 + 23) % 80 + 10}%`;
+          const top = `${(i * 19 + 31) % 70 + 15}%`;
+          const dur = 22 + (i % 3) * 6; // 22s to 34s
+          const delay = -(i * 2.8) % dur;
+          return (
+            <span
+              key={i}
+              className={`bg-decor__note bg-decor__note--${color}`}
+              style={{
+                left,
+                top,
+                fontSize: `${16 + (i % 3) * 5}px`,
+                animationDuration: `${dur}s`,
+                animationDelay: `${delay}s`,
+              }}
+            >
+              {symbol}
+            </span>
+          );
+        })}
+      </div>
+
       {/* floating covers — skip ones that failed to sign */}
       {covers.filter((c) => c.url).map((c) => (
         <div
