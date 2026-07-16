@@ -474,10 +474,96 @@
   100% { transform: translate(15px, -60px) rotate(-10deg); opacity: 0.01; }
 }
 
+/* --- Low-rider Bouncing Car --- */
+.bg-decor__lowrider {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16vh; /* positioned above bottom wave layer */
+  height: 100px;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.14; /* subtle: opacity 0.10–0.18 max */
+}
+.bg-decor__lowrider-drift {
+  width: 240px;
+  height: 100px;
+  will-change: transform;
+  animation: lowrider-drift 32s linear infinite;
+}
+.bg-decor__lowrider-bounce {
+  width: 240px;
+  height: 100px;
+  will-change: transform;
+  transform-origin: center bottom;
+  animation: lowrider-bounce 4.8s ease-in-out infinite;
+}
+@keyframes lowrider-drift {
+  0%   { transform: translateX(-260px); }
+  100% { transform: translateX(100vw); }
+}
+@keyframes lowrider-bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  15%      { transform: translateY(-7px) rotate(-1.5deg); } /* front hydraulic bounce */
+  30%      { transform: translateY(1px) rotate(0.5deg); }    /* drop and settle */
+  45%      { transform: translateY(-5px) rotate(1deg); }     /* rear hydraulic hop */
+  60%      { transform: translateY(0) rotate(-0.5deg); }     /* settle */
+  75%      { transform: translateY(-6px) rotate(-1deg); }    /* standard bounce */
+  88%      { transform: translateY(2px) rotate(0deg); }      /* drop */
+}
+
+/* --- Laughing Money-Eyes Skulls --- */
+.bg-decor__skull {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  pointer-events: none;
+  opacity: 0.13; /* subtle: opacity 0.10–0.18 max */
+}
+.bg-decor__skull--left {
+  left: 6%;
+  top: 14%; /* below marquee and header */
+}
+.bg-decor__skull--right {
+  right: 6%;
+  top: 14%;
+}
+.bg-decor__skull-breathe {
+  width: 120px;
+  height: 120px;
+  will-change: transform;
+  animation: skull-breathe 4.5s ease-in-out infinite alternate;
+}
+.bg-decor__skull-spin {
+  width: 120px;
+  height: 120px;
+  will-change: transform;
+  transform-origin: center center;
+  animation: skull-spin 38s linear infinite;
+}
+.bg-decor__skull-eye {
+  will-change: opacity, fill;
+  animation: skull-eye-glow 4.5s ease-in-out infinite alternate;
+}
+@keyframes skull-breathe {
+  0%   { transform: scale(1) translateY(0); }
+  100% { transform: scale(1.04) translateY(-6px); }
+}
+@keyframes skull-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes skull-eye-glow {
+  0%   { opacity: 0.75; }
+  100% { opacity: 1; fill: #ffffff; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .bg-decor, .bg-decor__wash, .bg-decor__core, .bg-decor__cover,
   .bg-decor__eq-bar, .bg-decor__scan, .bg-decor__wave-path--a,
-  .bg-decor__wave-path--b, .bg-decor__particle, .bg-decor__note {
+  .bg-decor__wave-path--b, .bg-decor__particle, .bg-decor__note,
+  .bg-decor__lowrider-drift, .bg-decor__lowrider-bounce,
+  .bg-decor__skull-breathe, .bg-decor__skull-spin, .bg-decor__skull-eye {
     animation: none !important;
   }
 }
