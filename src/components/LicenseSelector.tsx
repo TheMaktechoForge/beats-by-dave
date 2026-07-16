@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { BeatWithUrls, LicenseTier } from "@/lib/types";
 import { LICENSES, LICENSE_TIERS } from "@/lib/licenses";
@@ -31,6 +32,15 @@ export function LicenseSelector({ beat }: Props) {
     setTimeout(() => setAdded(false), 1500);
   };
 
+  const isExclusive = selected === "exclusive";
+
+  // Pre-filled mailto for exclusive inquiries — opens user's email client
+  const exclusiveMailto = `mailto:chadavbeats@gmail.com?subject=${encodeURIComponent(
+    `Exclusive rights inquiry: ${beat.title}`
+  )}&body=${encodeURIComponent(
+    `Hi,\n\nI'm interested in exclusive rights to "${beat.title}".\n\nIntended use:\nProject / artist name:\nRelease timeline:\nBudget:\n\nThanks!`
+  )}`;
+
   return (
     <div>
       <div className="space-y-2">
@@ -60,9 +70,21 @@ export function LicenseSelector({ beat }: Props) {
                     )}
                   </div>
                   <div className="text-sm text-[var(--color-text-muted)] mt-1">{meta.description}</div>
+                  {meta.exclusive && (
+                    <div className="text-xs text-[var(--color-accent)] mt-2 font-medium">
+                      Negotiated per-beat. Starting at {formatPrice(price)}. Email required to finalize.
+                    </div>
+                  )}
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="font-black text-lg">{formatPrice(price)}</div>
+                  {meta.exclusive ? (
+                    <>
+                      <div className="text-xs text-[var(--color-text-dim)]">Starting at</div>
+                      <div className="font-black text-lg">{formatPrice(price)}</div>
+                    </>
+                  ) : (
+                    <div className="font-black text-lg">{formatPrice(price)}</div>
+                  )}
                 </div>
               </div>
             </button>
@@ -70,18 +92,30 @@ export function LicenseSelector({ beat }: Props) {
         })}
       </div>
 
-      <div className="flex gap-3 mt-6">
-        <button onClick={handleAdd} className="btn-primary flex-1">
-          {added ? "✓ Added to Cart" : "Add to Cart"}
-        </button>
-        <button onClick={() => { handleAdd(); router.push("/cart"); }} className="btn-ghost">
-          Buy Now
-        </button>
-      </div>
-
-      <div className="mt-4 text-xs text-[var(--color-text-dim)]">
-        Secure checkout via PayPal. Instant download after payment.
-      </div>
+      {isExclusive ? (
+        <div className="flex gap-3 mt-6">
+          <a href={exclusiveMailto} className="btn-primary flex-1 inline-flex items-center justify-center">
+            Email to Negotiate
+          </a>
+          <Link href="/contact" className="btn-ghost inline-flex items-center justify-center">
+            Or open contact page
+          </Link>
+        </div>
+      ) : (
+        <>
+          <div className="flex gap-3 mt-6">
+            <button onClick={handleAdd} className="btn-primary flex-1">
+              {added ? "✓ Added to Cart" : "Add to Cart"}
+            </button>
+            <button onClick={() => { handleAdd(); router.push("/cart"); }} className="btn-ghost">
+              Buy Now
+            </button>
+          </div>
+          <div className="mt-4 text-xs text-[var(--color-text-dim)]">
+            Secure checkout via PayPal. Instant download after payment.
+          </div>
+        </>
+      )}
     </div>
   );
 }
