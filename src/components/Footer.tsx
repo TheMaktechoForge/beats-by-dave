@@ -16,6 +16,7 @@ export function Footer() {
             <li><Link href="/beats" className="hover:text-[var(--color-accent)]">All Beats</Link></li>
             <li><Link href="/licenses" className="hover:text-[var(--color-accent)]">Licenses</Link></li>
             <li><Link href="/cart" className="hover:text-[var(--color-accent)]">Cart</Link></li>
+            <li><Link href="/donate" className="hover:text-[var(--color-accent)]">Donate</Link></li>
           </ul>
         </div>
         <div>

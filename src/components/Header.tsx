@@ -29,6 +29,7 @@ export function Header() {
           <Link href="/licenses" className="hover:text-[var(--color-accent)] transition">Licenses</Link>
           <Link href="/about" className="hover:text-[var(--color-accent)] transition">About</Link>
           <Link href="/contact" className="hover:text-[var(--color-accent)] transition">Contact</Link>
+          <Link href="/donate" className="hover:text-[var(--color-accent)] transition text-[var(--color-accent)]">Donate</Link>
         </nav>
 
         <Link href="/cart" className="relative btn-ghost !py-2 !px-4">

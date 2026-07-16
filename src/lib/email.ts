@@ -119,3 +119,54 @@ export async function sendProducerNotification({ order, beatTitles }: ProducerNo
 function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 }
+
+// ----- DONATION THANK-YOU -----
+
+export interface DonationReceiptInput {
+  donorEmail: string;
+  donorName?: string;
+  amount: number;
+  transactionId: string;
+}
+
+export async function sendDonationReceipt({
+  donorEmail,
+  donorName,
+  amount,
+  transactionId,
+}: DonationReceiptInput) {
+  if (!resend) {
+    console.warn("RESEND_API_KEY missing — skipping donation receipt");
+    return;
+  }
+
+  const greet = donorName ? `Hey ${escapeHtml(donorName)},` : "Hey friend,";
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 0; color: #1a1a25; line-height: 1.6;">
+      <p style="font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; color: #8b8d98; margin: 0 0 8px;">The Maktecho Forge</p>
+      <h1 style="font-size: 28px; font-weight: 800; margin: 0 0 24px; line-height: 1.2;">Thank you. ${'\u{1F9E1}'}</h1>
+      <p>${greet}</p>
+      <p>Your <strong>$${(amount).toFixed(2)}</strong> donation just landed. We wanted to write back before the receipt did.</p>
+      <p>The Maktecho Forge is a small workshop. A handful of us, working with sound and code, color and rhythm, trying to make something true in the digital world. We don&apos;t make things to go viral. We make them because the making matters.</p>
+      <p>Your donation goes back into that. Into the next beat, the next visual, the next quiet thing we make at 2am because we couldn&apos;t not. Into keeping this little forge lit.</p>
+      <p>That&apos;s the whole of it. No tiers, no perks, no newsletter pitch. Just the work, kept going by people like you.</p>
+      <p>Thank you for being part of it.</p>
+      <p style="margin-top: 28px;">— The Maktecho Forge</p>
+      <hr style="border: none; border-top: 1px solid #e2e4ea; margin: 32px 0;" />
+      <p style="font-size: 12px; color: #6b6e78;">
+        Donation of $${(amount).toFixed(2)} USD \u00b7 PayPal order ${escapeHtml(transactionId)} \u00b7 ${new Date().toUTCString()}
+      </p>
+    </div>
+  `;
+
+  try {
+    await resend.emails.send({
+      from: FROM,
+      to: donorEmail,
+      subject: "Thank you for supporting The Maktecho Forge",
+      html,
+    });
+  } catch (e) {
+    console.error("Donation receipt failed:", e);
+  }
+}
