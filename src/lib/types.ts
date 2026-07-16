@@ -1,6 +1,6 @@
 // Domain types — match supabase/schema.sql exactly.
 
-export type LicenseTier = "mp3" | "wav" | "trackouts" | "exclusive";
+export type LicenseTier = "audio" | "exclusive";
 
 export type OrderStatus = "pending" | "paid" | "failed" | "refunded";
 

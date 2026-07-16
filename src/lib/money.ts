@@ -11,16 +11,12 @@ export function priceFor(
     price_trackouts_cents: number | null;
     price_exclusive_cents: number | null;
   },
-  license: "mp3" | "wav" | "trackouts" | "exclusive"
+  license: "audio" | "exclusive"
 ): number {
-  switch (license) {
-    case "mp3": return beat.price_mp3_cents ?? 0;
-    case "wav": return beat.price_wav_cents ?? 0;
-    case "trackouts": return beat.price_trackouts_cents ?? 0;
-    case "exclusive": return beat.price_exclusive_cents ?? 0;
-  }
+  if (license === "audio") return beat.price_mp3_cents ?? 0;
+  return beat.price_exclusive_cents ?? 0;
 }
 
-export function cartItemPrice(item: { beat: { price_mp3_cents: number | null; price_wav_cents: number | null; price_trackouts_cents: number | null; price_exclusive_cents: number | null }; license: "mp3" | "wav" | "trackouts" | "exclusive" }): number {
+export function cartItemPrice(item: { beat: { price_mp3_cents: number | null; price_wav_cents: number | null; price_trackouts_cents: number | null; price_exclusive_cents: number | null }; license: "audio" | "exclusive" }): number {
   return priceFor(item.beat, item.license);
 }

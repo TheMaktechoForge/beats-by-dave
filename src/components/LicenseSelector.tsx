@@ -14,7 +14,7 @@ interface Props {
 export function LicenseSelector({ beat }: Props) {
   const router = useRouter();
   const add = useCart((s) => s.add);
-  const [selected, setSelected] = useState<LicenseTier>("mp3");
+  const [selected, setSelected] = useState<LicenseTier>("audio");
   const [added, setAdded] = useState(false);
 
   const tiers = LICENSE_TIERS.filter((t) => {

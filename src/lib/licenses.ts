@@ -22,45 +22,27 @@ export interface LicenseMeta {
 }
 
 export const LICENSES: Record<LicenseTier, LicenseMeta> = {
-  mp3: {
-    key: "mp3",
-    label: "MP3 Lease",
-    shortLabel: "MP3",
-    description: "Untagged MP3 file for streaming/distribution under $10K revenue.",
+  audio: {
+    key: "audio",
+    label: "Audio File",
+    shortLabel: "Audio",
+    description: "Untagged MP3 + WAV. For streams and sales under $50K gross revenue.",
     priceField: "price_mp3_cents",
-    filePreference: ["mp3"],
-    exclusive: false,
-  },
-  wav: {
-    key: "wav",
-    label: "WAV Lease",
-    shortLabel: "WAV",
-    description: "Untagged WAV file for streaming/distribution under $50K revenue.",
-    priceField: "price_wav_cents",
-    filePreference: ["wav"],
-    exclusive: false,
-  },
-  trackouts: {
-    key: "trackouts",
-    label: "Trackouts / Stems",
-    shortLabel: "Trackouts",
-    description: "Untagged WAV + stems for mixing; under $250K revenue.",
-    priceField: "price_trackouts_cents",
-    filePreference: ["trackouts", "wav"],
+    filePreference: ["wav", "mp3"],
     exclusive: false,
   },
   exclusive: {
     key: "exclusive",
-    label: "Exclusive Rights",
+    label: "Full Rights",
     shortLabel: "Exclusive",
-    description: "Full exclusive transfer of master recording rights. Beat delisted on sale.",
+    description: "Full exclusive transfer of master recording rights. Beat delisted on sale. Negotiated per-beat with revenue-based clauses.",
     priceField: "price_exclusive_cents",
     filePreference: ["trackouts", "wav"],
     exclusive: true,
   },
 };
 
-export const LICENSE_TIERS: LicenseTier[] = ["mp3", "wav", "trackouts", "exclusive"];
+export const LICENSE_TIERS: LicenseTier[] = ["audio", "exclusive"];
 
 export function priceForLicense(
   beat: { price_mp3_cents: number | null; price_wav_cents: number | null; price_trackouts_cents: number | null; price_exclusive_cents: number | null },
@@ -143,7 +125,7 @@ export async function generateLicensePdf(input: PdfInput): Promise<Uint8Array> {
 
   // Footer
   page.drawText(
-    "This license is a non-exclusive agreement unless Exclusive Rights are purchased. " +
+    "This license is a non-exclusive agreement unless Full Rights are purchased. " +
       "By downloading the beat, the Licensee agrees to the full terms at beats.themaktechoforge.com/terms.",
     { x: 50, y: 50, size: 8, font, color: muted, maxWidth: 512, lineHeight: 10 }
   );
@@ -154,31 +136,15 @@ export async function generateLicensePdf(input: PdfInput): Promise<Uint8Array> {
 function licenseTerms(tier: LicenseTier, beatTitle: string): string[] {
   const base = [
     `1. The Producer ("Beats by Dave") grants the Licensee a non-transferable license to use the audio recording titled "${beatTitle}" (the "Beat").`,
-    "2. The Licensee shall credit the Producer as follows: \"Produced by Beats by Dave\" in all metadata, liner notes, and visible credits where applicable.",
-    "3. The Licensee may modify the Beat for the purpose of the Licensee's original musical composition (the \"Song\").",
+    "2. The Licensee shall credit the Producer as follows: 'Produced by Beats by Dave' in all metadata, liner notes, and visible credits where applicable.",
+    "3. The Licensee may modify the Beat for the purpose of the Licensee's original musical composition (the 'Song').",
     "4. The Licensee retains 100% of the publishing and master ownership of the resulting Song, subject to the Producer's royalty share defined below.",
   ];
-  if (tier === "mp3") {
+  if (tier === "audio") {
     return [
       ...base,
-      "5. Distribution cap: streams and sales of the Song shall not exceed US$10,000 in gross revenue without upgrading to a higher tier.",
-      "6. The Licensee receives the Beat as an untagged MP3 file only.",
-      "7. Royalty: Producer receives 50% of net publishing income from the Song.",
-    ];
-  }
-  if (tier === "wav") {
-    return [
-      ...base,
-      "5. Distribution cap: streams and sales of the Song shall not exceed US$50,000 in gross revenue without upgrading to a higher tier.",
-      "6. The Licensee receives the Beat as an untagged WAV file (24-bit, 44.1 kHz).",
-      "7. Royalty: Producer receives 50% of net publishing income from the Song.",
-    ];
-  }
-  if (tier === "trackouts") {
-    return [
-      ...base,
-      "5. Distribution cap: streams and sales of the Song shall not exceed US$250,000 in gross revenue without purchasing Exclusive Rights.",
-      "6. The Licensee receives the Beat as untagged WAV stems (trackouts) for mixing.",
+      "5. Distribution cap: streams and sales of the Song shall not exceed US$50,000 in gross revenue without purchasing Full Rights.",
+      "6. The Licensee receives the Beat as untagged MP3 and WAV files (24-bit, 44.1 kHz).",
       "7. Royalty: Producer receives 50% of net publishing income from the Song.",
     ];
   }

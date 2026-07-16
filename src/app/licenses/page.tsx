@@ -7,8 +7,8 @@ export default function LicensesPage() {
       <div className="text-xs uppercase tracking-[0.25em] text-[var(--color-accent)] mb-2">Licensing</div>
       <h1 className="text-4xl md:text-5xl font-black mb-3">Simple, honest terms.</h1>
       <p className="text-[var(--color-text-muted)] text-lg mb-12 max-w-2xl">
-        Every beat is available in four tiers. Pick the one that matches your budget and your release.
-        Higher tiers unlock more files and higher revenue caps.
+        Every beat is available in two ways. Lease the audio file for the standard rate, or reach out
+        for full rights with revenue-based clauses.
       </p>
 
       <div className="space-y-4">
@@ -55,24 +55,10 @@ export default function LicensesPage() {
 
 function bulletsFor(tier: string): string[] {
   switch (tier) {
-    case "mp3":
+    case "audio":
       return [
-        "Untagged MP3 file",
-        "For streams and sales up to US$10,000 gross revenue",
-        "50% publishing royalty to producer",
-        "Credit 'Produced by Beats by Dave'",
-      ];
-    case "wav":
-      return [
-        "Untagged WAV file (24-bit, 44.1 kHz)",
+        "Untagged MP3 + WAV file (24-bit, 44.1 kHz)",
         "For streams and sales up to US$50,000 gross revenue",
-        "50% publishing royalty to producer",
-        "Credit 'Produced by Beats by Dave'",
-      ];
-    case "trackouts":
-      return [
-        "Untagged WAV + stems (trackouts) for mixing",
-        "For streams and sales up to US$250,000 gross revenue",
         "50% publishing royalty to producer",
         "Credit 'Produced by Beats by Dave'",
       ];
@@ -82,6 +68,7 @@ function bulletsFor(tier: string): string[] {
         "Beat is delisted on sale",
         "Includes WAV + stems + project session if available",
         "Producer retains 50% of publishing rights",
+        "Revenue-based clauses negotiated per release",
       ];
     default:
       return [];
